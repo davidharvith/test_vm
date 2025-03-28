@@ -182,7 +182,7 @@ int main(int argc, char* argv[])
   int i = 2;
   int size = 100;
   while(size < max_size){
-    auto* arr =(array_element_t*) malloc (size);
+    auto* arr =(array_element_t*) malloc (size*sizeof(array_element_t));
     if (arr == NULL) {
       fprintf(stderr, "Memory allocation failed for size %d\n", size);
       exit(-1);
