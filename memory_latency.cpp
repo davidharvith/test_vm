@@ -179,7 +179,7 @@ int main(int argc, char* argv[])
   float factor = parse_float (argv[2]);
   int repeat = parse_int (argv[3]);
   validate_input (max_size, factor, repeat);
-  int i = 2;
+  int i = 1;
   int size = 100;
   while(size < max_size){
     auto* arr =(array_element_t*) malloc (size*sizeof(array_element_t));
@@ -188,12 +188,11 @@ int main(int argc, char* argv[])
       exit(-1);
     }
     measurement rand_mes = measure_latency(repeat, arr, size, zero);
-    //measurement seq_mes = measure_sequential_latency(repeat, arr, size,
-    // zero);
-    printf("mem_size1(%d),offset1(random access %f, ns),offset1", size,
-           rand_mes.access_time-rand_mes.baseline);
-         //"(sequential %f, ns)\n", size, rand_mes.access_time-rand_mes
-         //.baseline, seq_mes.access_time-seq_mes.baseline);
+    measurement seq_mes = measure_sequential_latency(repeat,
+                                                     arr, size, zero);
+    printf("mem_size1(%d),offset1(random access %f, ns),offset1"
+         "(sequential %f, ns)\n", size, rand_mes.access_time-rand_mes
+         .baseline, seq_mes.access_time-seq_mes.baseline);
     free(arr);
     size = (int)pow (factor,i)*100;
 
