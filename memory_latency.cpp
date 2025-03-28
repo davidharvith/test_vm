@@ -188,12 +188,14 @@ int main(int argc, char* argv[])
       exit(-1);
     }
     measurement rand_mes = measure_latency(repeat, arr, size, zero);
-    measurement seq_mes = measure_sequential_latency(repeat, arr, size, zero);
-    printf("mem_size1(%d),offset1(random access %f, ns),offset1"
-           "(sequential %f, ns)\n", size, rand_mes.access_time-rand_mes
-           .baseline, seq_mes.access_time-seq_mes.baseline);
+    //measurement seq_mes = measure_sequential_latency(repeat, arr, size,
+    // zero);
+    printf("mem_size1(%d),offset1(random access %f, ns),offset1", size,
+           rand_mes.access_time-rand_mes.baseline);
+         //"(sequential %f, ns)\n", size, rand_mes.access_time-rand_mes
+         //.baseline, seq_mes.access_time-seq_mes.baseline);
     free(arr);
-    size = pow (factor,i)*100;
+    size = (int)pow (factor,i)*100;
 
 
     i++;
