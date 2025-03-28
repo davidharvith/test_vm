@@ -7,8 +7,84 @@
 #include <cstdlib>
 #include <cerrno>
 #include <cstdint>
+#include <cmath>
 
 #define GALOIS_POLYNOMIAL ((1ULL << 63) | (1ULL << 62) | (1ULL << 60) | (1ULL << 59))
+
+
+/**
+ * parses input into a 64 bit int and throws an error if it not compatable
+ * @param str to convert
+ * @return the 64 bit int value
+ */
+int64_t parse_int64 (const char *str)
+{
+  char *endptr;
+  errno = 0;
+  int64_t value = strtoll(str, &endptr, 10);
+
+  if (errno != 0 || *endptr != '\0') {
+    fprintf(stderr, "Invalid 64 bit int input '%s'.\n", str);
+    exit(-1);
+  }
+  return value;
+}
+
+
+int parse_int (const char *str)
+{
+  char *endptr;
+  errno = 0;
+  int value = strtol(str, &endptr, 10);
+
+  if (errno != 0 || *endptr != '\0') {
+    fprintf(stderr, "Invalid 64 bit int input '%s'.\n", str);
+    exit(-1);
+  }
+  return value;
+}
+
+/**
+ * parses the input into a float and throwh an error if it is not a float
+ * @param str to convert
+ * @return the float value of the string
+ */
+float parse_float (const char *str)
+{
+  char *endptr;
+  errno = 0;
+  float value = strtof(str, &endptr);
+
+  if (errno != 0 || *endptr != '\0') {
+    fprintf(stderr, "Invalid float input '%s'.\n", str);
+    exit(-1);
+  }
+  return value;
+}
+
+/**
+ * checks the validity of the users input
+ * @param max_size the maximum size of array to check
+ * @param factor the factor to multiply by
+ * @param repeat how many times to reapt
+ */
+void validate_input (int64_t max_size, float factor, int repeat)
+{
+  if (max_size < 100) {
+    fprintf(stderr, "max_size must be more than 100.\n");
+    exit(-1);
+  }
+  if (factor <= 1.0) {
+    fprintf(stderr, "factor must be  more than 1.\n");
+    exit(-1);
+  }
+  if (repeat <= 0) {
+    fprintf(stderr, "Error: repeat must be more than 0.\n");
+    exit(-1);
+  }
+}
+
+
 
 /**
  * Converts the struct timespec to time in nano-seconds.
@@ -103,79 +179,22 @@ int main(int argc, char* argv[])
   float factor = parse_float (argv[2]);
   int repeat = parse_int (argv[3]);
   validate_input (max_size, factor, repeat);
+  int i = 2;
+  int size = 100;
+  while(size < max_size){
+    auto* arr =(array_element_t*) malloc (size);
 
+    measurement rand_mes = measure_latency(repeat, arr, size, zero);
+    measurement seq_mes = measure_sequential_latency(repeat, arr, size, zero);
+    printf("mem_size1(%d),offset1(random access %f, ns),offset1"
+           "(sequential %f, ns)", size, rand_mes.access_time-rand_mes
+           .baseline, seq_mes.access_time-seq_mes.baseline);
+    free(arr);
+    size = pow (factor,i)*100;
+
+
+    i++;
+  }
 
 }
 
-
-/**
- * parses input into a 64 bit int and throws an error if it not compatable
- * @param str to convert
- * @return the 64 bit int value
- */
-int64_t parse_int64 (const char *str)
-{
-  char *endptr;
-  errno = 0;
-  int64_t value = strtoll(str, &endptr, 10);
-
-  if (errno != 0 || *endptr != '\0') {
-    fprintf(stderr, "Invalid 64 bit int input '%s'.\n", str);
-    exit(-1);
-  }
-  return value;
-}
-
-
-int parse_int (const char *str)
-{
-  char *endptr;
-  errno = 0;
-  int value = strtol(str, &endptr, 10);
-
-  if (errno != 0 || *endptr != '\0') {
-    fprintf(stderr, "Invalid 64 bit int input '%s'.\n", str);
-    exit(-1);
-  }
-  return value;
-}
-
-/**
- * parses the input into a float and throwh an error if it is not a float
- * @param str to convert
- * @return the float value of the string
- */
-float parse_float (const char *str)
-{
-  char *endptr;
-  errno = 0;
-  float value = strtof(str, &endptr);
-
-  if (errno != 0 || *endptr != '\0') {
-    fprintf(stderr, "Invalid float input '%s'.\n", str);
-    exit(-1);
-  }
-  return value;
-}
-
-/**
- * checks the validity of the users input
- * @param max_size the maximum size of array to check
- * @param factor the factor to multiply by
- * @param repeat how many times to reapt
- */
-void validate_input (int64_t max_size, float factor, int repeat)
-{
-  if (max_size <= 100) {
-    fprintf(stderr, "max_size must be more than 100.\n");
-    exit(-1);
-  }
-  if (factor <= 1.0) {
-    fprintf(stderr, "factor must be  more than 1.\n");
-    exit(-1);
-  }
-  if (repeat <= 0) {
-    fprintf(stderr, "Error: repeat must be more than 0.\n");
-    exit(-1);
-  }
-}

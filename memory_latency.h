@@ -42,35 +42,5 @@ uint64_t nanosectime(struct timespec t);
 */
 struct measurement measure_sequential_latency(uint64_t repeat, array_element_t* arr, uint64_t arr_size, uint64_t zero);
 
-/**
- * checks the validity of the users input
- * @param max_size the maximum size of array to check
- * @param factor the factor to multiply by
- * @param repeat how many times to reapt
- */
-void validate_input(int64_t max_size, float factor, int repeat);
-
-
-/**
- * parses the input into a float and throwh an error if it is not a float
- * @param str to convert
- * @return the float value of the string
- */
-float parse_float(const char *str);
-
-
-/**
- * parses input into a 64 bit int and throws an error if it not compatable
- * @param str to convert
- * @return the 64 bit int value
- */
-int64_t parse_int64(const char *str);
-
-/**
- * parses input into a int and throws error if not compatable
- * @param str to convert
- * @return int
- */
-int parse_int (const char *str);
 
 #endif
