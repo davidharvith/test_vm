@@ -66,5 +66,11 @@ float parse_float(const char *str);
  */
 int64_t parse_int64(const char *str);
 
+/**
+ * parses input into a int and throws error if not compatable
+ * @param str to convert
+ * @return int
+ */
+int parse_int (const char *str);
 
 #endif

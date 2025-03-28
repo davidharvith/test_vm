@@ -99,6 +99,10 @@ int main(int argc, char* argv[])
     exit(-1);
   }
 
+  int64_t max_size = parse_int64 (argv[1]);
+  float factor = parse_float (argv[2]);
+  int repeat = parse_int (argv[3]);
+  validate_input (max_size, factor, repeat);
 
 
 }
@@ -122,6 +126,19 @@ int64_t parse_int64 (const char *str)
   return value;
 }
 
+
+int parse_int (const char *str)
+{
+  char *endptr;
+  errno = 0;
+  int value = strtol(str, &endptr, 10);
+
+  if (errno != 0 || *endptr != '\0') {
+    fprintf(stderr, "Invalid 64 bit int input '%s'.\n", str);
+    exit(-1);
+  }
+  return value;
+}
 
 /**
  * parses the input into a float and throwh an error if it is not a float
