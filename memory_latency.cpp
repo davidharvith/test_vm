@@ -183,11 +183,14 @@ int main(int argc, char* argv[])
   int size = 100;
   while(size < max_size){
     auto* arr =(array_element_t*) malloc (size);
-
+    if (arr == NULL) {
+      fprintf(stderr, "Memory allocation failed for size %d\n", size);
+      exit(-1);
+    }
     measurement rand_mes = measure_latency(repeat, arr, size, zero);
     measurement seq_mes = measure_sequential_latency(repeat, arr, size, zero);
     printf("mem_size1(%d),offset1(random access %f, ns),offset1"
-           "(sequential %f, ns)", size, rand_mes.access_time-rand_mes
+           "(sequential %f, ns)\n", size, rand_mes.access_time-rand_mes
            .baseline, seq_mes.access_time-seq_mes.baseline);
     free(arr);
     size = pow (factor,i)*100;
