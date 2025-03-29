@@ -133,8 +133,8 @@ struct measurement measure_sequential_latency(uint64_t repeat, array_element_t* 
   rnd=(rnd & zero) ^ 12345;
   for (register uint64_t i = 0; i < repeat; i++)
   {
-    register uint64_t index = rnd % arr_size;
-    rnd ^= arr[i] & zero;
+    register uint64_t index = i % arr_size;
+    rnd ^= arr[index] & zero;
     rnd = (rnd >> 1) ^ ((0-(rnd & 1)) & GALOIS_POLYNOMIAL);  // Advance rnd pseudo-randomly (using Galois LFSR)
   }
   struct timespec t3;
@@ -189,6 +189,9 @@ int main(int argc, char* argv[])
     if (arr == NULL) {
       fprintf(stderr, "Memory allocation failed for size %d\n", size);
       exit(-1);
+    }
+    for(array_element_t j = 0; j<size;j++){
+      arr[j] = j;
     }
     measurement rand_mes = measure_latency(repeat, arr, size, zero);
     measurement seq_mes = measure_sequential_latency(repeat,
