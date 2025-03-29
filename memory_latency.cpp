@@ -2,12 +2,14 @@
 
 #include "memory_latency.h"
 #include "measure.h"
+/*
 #include <ctime>
 #include <cstdio>
 #include <cstdlib>
 #include <cerrno>
 #include <cstdint>
 #include <cmath>
+*/
 
 #define GALOIS_POLYNOMIAL ((1ULL << 63) | (1ULL << 62) | (1ULL << 60) | (1ULL << 59))
 
@@ -107,7 +109,8 @@ uint64_t nanosectime(struct timespec t)
 *      double access_time - the average time (ns) taken to preform the measured operation with memory access.
 *      uint64_t rnd - the variable used to randomly access the array, returned to prevent compiler optimizations.
 */
-struct measurement measure_sequential_latency(uint64_t repeat, array_element_t* arr, uint64_t arr_size, uint64_t zero)
+struct measurement measure_sequential_latency(uint64_t repeat, array_element_t* arr,
+    uint64_t arr_size, uint64_t zero)
 {
   repeat = arr_size > repeat ? arr_size:repeat; // Make sure repeat >= arr_size
 
@@ -194,7 +197,7 @@ int main(int argc, char* argv[])
          "(sequential %f, ns)\n", size, rand_mes.access_time-rand_mes
          .baseline, seq_mes.access_time-seq_mes.baseline);
     free(arr);
-    size = (int)pow (factor,i)*100;
+    size = (int)(pow (factor,i)*100);
 
 
     i++;
