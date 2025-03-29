@@ -2,14 +2,14 @@
 
 #include "memory_latency.h"
 #include "measure.h"
-/*
-#include <ctime>
-#include <cstdio>
-#include <cstdlib>
+
+//#include <ctime>
+//#include <cstdio>
+//#include <cstdlib>
 #include <cerrno>
-#include <cstdint>
+//#include <cstdint>
 #include <cmath>
-*/
+
 
 #define GALOIS_POLYNOMIAL ((1ULL << 63) | (1ULL << 62) | (1ULL << 60) | (1ULL << 59))
 
