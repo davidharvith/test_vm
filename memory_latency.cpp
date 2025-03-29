@@ -190,8 +190,8 @@ int main(int argc, char* argv[])
       fprintf(stderr, "Memory allocation failed for size %d\n", size);
       exit(-1);
     }
-    for(array_element_t j = 0; j<size;j++){
-      arr[j] = j;
+    for(int j = 0; j<size;j++){
+      arr[j] = (array_element_t)j;
     }
     measurement rand_mes = measure_latency(repeat, arr, size, zero);
     measurement seq_mes = measure_sequential_latency(repeat,
