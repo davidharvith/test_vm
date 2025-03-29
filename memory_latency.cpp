@@ -133,8 +133,8 @@ struct measurement measure_sequential_latency(uint64_t repeat, array_element_t* 
   rnd=(rnd & zero) ^ 12345;
   for (register uint64_t i = 0; i < repeat; i++)
   {
-    register uint64_t index = i % arr_size;
-    rnd ^= arr[index] & zero;
+    register uint64_t index = rnd % arr_size;
+    rnd ^= arr[i] & zero;
     rnd = (rnd >> 1) ^ ((0-(rnd & 1)) & GALOIS_POLYNOMIAL);  // Advance rnd pseudo-randomly (using Galois LFSR)
   }
   struct timespec t3;
